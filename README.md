@@ -38,10 +38,10 @@ The required tasks include:
 The project is structured into weekly phases, moving from Exploratory Data Analysis (EDA) to the implementation of the advanced Transformer model.
 
 ### 1️⃣ **Data Understanding and EDA**
-- **Time-series Visualisation:** Selecting an appropriate plot for financial time-series. 
-- **Time-series Decomposition:** Analysing long-term trend, seasonality, and residuals (using STL decomposition).
-- **Autocorrelation Analysis (ACF/PACF):** Studying temporal dependencies in the dataset.
-- **Partitioning Plan:** Designing the strategy for dividing the time series into train, validation, and test sets.
+- **Time-series Visualisation:** Selecting an appropriate plot for financial time-series. **(VojtaD)**
+- **Time-series Decomposition:** Analysing long-term trend, seasonality, and residuals (using STL decomposition). **(Kuba)**
+- **Autocorrelation Analysis (ACF/PACF):** Studying temporal dependencies in the dataset. **(VojtaV)**
+- **Partitioning Plan:** Designing the strategy for dividing the time series into train, validation, and test sets. **(call together)**
 
 ### 2️⃣ **Pretreatment and Baseline Model**
 - **Data Preprocessing:** Handling issues such as ensuring uniform frequency, variable synchronisation, and strategies for filling missing values.
