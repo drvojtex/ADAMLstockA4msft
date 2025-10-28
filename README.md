@@ -74,17 +74,19 @@ The project is structured into weekly phases, moving from Exploratory Data Analy
 ```
 ADAMLstockA4msft
 │
-├─ utils/
-│   ├─ Collection of Python helper functions for data loading, preprocessing, and analysis.
-│   │   • Standardisation/Scaling routines
-│   │   • Time-series partitioning and sequence creation
+├─ src/
+│   ├─ Collection of Python helper classes for data loading, preprocessing, and analysis.
+│   │   • dataloader.py: loader interface for csv files, creates pandas dataframe
 │   
 ├─ data/
-│   ├─ Raw and preprocessed MSFT stock data files (MSFT_stock_data.csv)
+│   ├─ Raw MSFT stock data files (MSFT_2006-01-01_to_2018-01-01.csv)
 │   
 ├─ documentation/
 │   ├─ Project reports (Part1.pdf, Part2.pdf, etc. - submissions for each phase)
 │
+├─ main1.ipynb
+│   │   • initial dataloading, analysis and visualisation
+|
 ├─ LICENSE
 │   ├─ GPL-3.0 license
 │
