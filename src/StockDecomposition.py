@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from statsmodels.tsa.seasonal import seasonal_decompose
+from statsmodels.tsa.seasonal import STL
 
 
 class StockDecomposition:
@@ -29,7 +29,7 @@ class StockDecomposition:
 		"""
 		Perform seasonal decomposition (trend, seasonal, residual).
 		"""
-		self.result = seasonal_decompose(self.ts, model='multiplicative', period=self.period)
+		self.result = STL(self.ts, period=self.period, robust=True).fit()
 
 	def plot(self, out_path: str = None):
 		"""
