@@ -78,6 +78,8 @@ ADAMLstockA4msft
 │   ├─ Collection of Python helper classes for data loading, preprocessing, and analysis.
 │   │   • dataloader.py: loader interface for csv files, creates pandas dataframe
 │   │   • StockVisualiser.py: visualise stock time-series via plotly
+│   │   • StockAutocorrelation.py: compute time-series autocorrelation
+│   │   • StockDecomposition.py: time-series decomposition (trend, seasonality, residual)
 │   
 ├─ data/
 │   ├─ Raw MSFT stock data files (MSFT_2006-01-01_to_2018-01-01.csv)
