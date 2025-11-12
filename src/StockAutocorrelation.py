@@ -5,7 +5,8 @@ import warnings
 
 
 class StockAutocorrelation:
-    def __init__(self):
+    def __init__(self, dpi = 80):
+        self.dpi = dpi
         # Suppress pandas/Plotly FutureWarnings
         warnings.filterwarnings(
             "ignore",
@@ -32,7 +33,7 @@ class StockAutocorrelation:
 
     def plot_autocorelation(self, lags: int = 20):
         """ Compute and render autocorelation of 'data_name'. """
-        fig, ax = plt.subplots(figsize=(7,4))
+        fig, ax = plt.subplots(figsize=(7,4), dpi=self.dpi)
         plot_acf(self.data, lags=lags, ax=ax)
         ax.set_xlabel("Lag")
         ax.set_ylabel("Autocorrelation")
@@ -41,7 +42,7 @@ class StockAutocorrelation:
     
     def plot_lag(self):
         """ Plot lag """
-        fig2, ax2 = plt.subplots(figsize=(6,5))
+        fig2, ax2 = plt.subplots(figsize=(6,5), dpi=self.dpi)
         pd.plotting.lag_plot(self.data, lag=1, ax=ax2)
         ax2.set_xlabel("y(t)")
         ax2.set_ylabel("y(t+1)")
