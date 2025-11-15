@@ -83,58 +83,66 @@ class CSVDataLoader:
             raise ValueError("Data not loaded yet. Call `.load()` first.")
         return self._data
 
-    def split_by_year(self, train_years: List[int], test_years: List[int]) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    def split_by_year(
+        self,
+        train_years: List[int],
+        test_years: List[int]
+    ) -> Tuple[np.ndarray, np.ndarray]:
         """
-        Filter data based on specified years for training and testing, 
-        and split into features (X) and target (y) NumPy arrays.
-
-        Features (X) include 'Open', 'High', 'Low', 'Volume'.
-        Target (y) is 'Close'.
-        The order of days is preserved from the raw dataframe.
-
-        Args:
-            train_years (List[int]): List of years to include in the training set.
-            test_years (List[int]): List of years to include in the testing set.
-
-        Returns:
-            Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]: 
-                (X_train, y_train, X_test, y_test)
-        
-        Raises:
-            ValueError: If data has not been loaded or 'Date' column is missing/incorrectly formatted.
+        Split data into X_train and X_test based on years.
+        X contains: Open, High, Low, Volume, Close + one-hot date features 
+        (day of week, week of month, month of year).
         """
-        
-        # Load and check data
+
+        # Load data
         df = self.load()
         if 'Date' not in df.columns:
             raise ValueError("DataFrame must contain a 'Date' column.")
         df['Date'] = pd.to_datetime(df['Date'])
-        
-        # Check the Date column format
-        try:
-            df['Year'] = df['Date'].dt.year
-        except AttributeError:
-            raise ValueError("'Date' column is not in datetime format. Check `parse_dates` in initialization.")
-            
-        # Define and check features columns
-        feature_cols = ['Open', 'High', 'Low', 'Volume']
-        target_col = 'Close'
-        missing_cols = [col for col in feature_cols + [target_col] if col not in df.columns]
-        if missing_cols:
-            raise ValueError(f"Missing required columns in data: {', '.join(missing_cols)}")
 
-        # Create training data matrix
-        train_mask = df['Year'].isin(train_years)
-        df_train = df[train_mask].sort_values(by='Date').reset_index(drop=True)
-        
-        # Create testing data matrix
-        test_mask = df['Year'].isin(test_years)
-        df_test = df[test_mask].sort_values(by='Date').reset_index(drop=True)
+        # Add Year column
+        df['Year'] = df['Date'].dt.year
 
-        # Split into input and target matrices
-        X_train = df_train[feature_cols].values
-        y_train = df_train[target_col].values
-        X_test = df_test[feature_cols].values
-        y_test = df_test[target_col].values
-        
-        return X_train, y_train, X_test, y_test
+        # Required columns
+        base_cols = ['Open', 'High', 'Low', 'Volume', 'Close']
+        missing = [c for c in base_cols if c not in df.columns]
+        if missing:
+            raise ValueError(f"Missing columns: {', '.join(missing)}")
+
+        # Train/test splits
+        df_train = df[df['Year'].isin(train_years)].sort_values('Date').reset_index(drop=True)
+        df_test  = df[df['Year'].isin(test_years)].sort_values('Date').reset_index(drop=True)
+
+        # Base feature matrices
+        X_train = df_train[base_cols].values
+        X_test  = df_test[base_cols].values
+
+        # -------------------------------------------------------
+        # Add one-hot encoded date features (22 columns)
+        # -------------------------------------------------------
+        def build_date_features(df_in):
+            # Monday–Friday -> weekday 0–4
+            dow = df_in['Date'].dt.weekday.clip(0, 4)
+
+            # Week of month: 1–5
+            wom = ((df_in['Date'].dt.day - 1) // 7) + 1
+
+            # Month of year: 1–12
+            moy = df_in['Date'].dt.month
+
+            # one-hot encodings
+            one_hot_dow = np.eye(5)[dow]          # (n, 5)
+            one_hot_wom = np.eye(5)[wom - 1]      # (n, 5)
+            one_hot_moy = np.eye(12)[moy - 1]     # (n, 12)
+
+            # final concat: shape (n, 22)
+            return np.hstack([one_hot_dow, one_hot_wom, one_hot_moy])
+
+        # Build and append date features
+        date_train = build_date_features(df_train)
+        date_test  = build_date_features(df_test)
+
+        X_train = np.hstack([X_train, date_train])
+        X_test  = np.hstack([X_test, date_test])
+
+        return X_train, X_test
