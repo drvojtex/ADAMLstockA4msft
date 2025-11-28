@@ -29,7 +29,7 @@ class SimpleLSTM(nn.Module):
     
 # --- Finall Model Definition ---
 class FinallModel(nn.Module):
-    def __init__(self, input_size, hidden_size, rnn_type = "LSTM", num_layers=2, dropout = 0.0):
+    def __init__(self, input_size, hidden_size, rnn_type = "LSTM", num_layers=2, dropout = 0.0, out_dim = 1):
         super().__init__()
         
         # Encode date one hot encoding
@@ -49,7 +49,7 @@ class FinallModel(nn.Module):
             raise ValueError(f"Unknown rnn type = {rnn_type}")
         
         # Out linear (predict return)
-        self.out_linear = nn.Linear(hidden_size, 1)
+        self.out_linear = nn.Linear(hidden_size, out_dim)
 
     
     def forward(self, x, h=None):
@@ -70,4 +70,4 @@ class FinallModel(nn.Module):
         out = out[:, -1, :] 
         out = self.out_linear(out)
 
-        return out.squeeze(-1), h
+        return out, h
