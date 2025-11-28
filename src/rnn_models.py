@@ -50,6 +50,7 @@ class FinallModel(nn.Module):
         
         # Out linear (predict return)
         self.out_linear = nn.Linear(hidden_size, 1)
+
     
     def forward(self, x, h=None):
         # split

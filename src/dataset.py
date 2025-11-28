@@ -83,5 +83,4 @@ class StockTorchDataset(Dataset):
             y_values.append(self.X[real_idx + t, 0])  # standardized change at t days ahead
 
         y = torch.tensor(y_values, dtype=torch.float32)
-
         return x, y

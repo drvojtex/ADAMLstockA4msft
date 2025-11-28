@@ -1,0 +1,4 @@
+img0: MAE = 0.501 (2 years), train(2006-2015), test(2016,2017), target_days = [1]
+img1: MAE = 0.494 (2 years), train(2006-2015), test(2016,2017)
+img2: MAE = 0.335, train(2006-2008), test(2009), target_days = [1, 5]
+img3: MAE = 0.342, train(2006-2008), test(2009), target_days = [1]
