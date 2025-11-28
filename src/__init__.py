@@ -5,3 +5,4 @@ from .StockDecomposition import StockDecomposition
 from .dataset import StockTorchDataset
 from .rnn_models import FinallModel
 from .rnn_models import SimpleLSTM
+from .transformerdataset import StockTorchTransDataset

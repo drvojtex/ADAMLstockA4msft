@@ -5,7 +5,7 @@ import numpy as np
 from torch.utils.data import Dataset
 
 
-class StockTorchDataset(Dataset):
+class StockTorchTransDataset(Dataset):
     def __init__(self, data: np.ndarray, zscore_params=None, history=5, target_days=[1]):
         """
         data: numpy matrix shape (N, D)
