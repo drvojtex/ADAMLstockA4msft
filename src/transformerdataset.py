@@ -20,13 +20,15 @@ class StockTorchTransDataset(Dataset):
         self.history = history
         self.target_days = sorted(target_days)
 
-        # --- 1) Extract columns 1..5 ---
-        base = data[:, 1:6].astype(np.float32)     # shape (N, 5)
+        # --- 1) Extract columns 0-4 ---
+        base = data[:, 0:5].astype(np.float32)     # shape (N, 5)
+        # print(base)
 
         # --- 2) Diference columns 1..4 ---
         diff = np.zeros_like(base)
-        diff[1:, :4] = base[1:, :4] - base[:-1, :4]
-        diff[:, 4] = base[:, 4]                    # col5 stays unchanged before zscore
+        diff[1:, :3] = base[1:, :3] - base[:-1, :3]
+        diff[:, 3] = base[:, 3]                    # Volume stays unchanged before zscore
+        diff[1:, 4] = base[1:, 4] - base[:-1, 4]   # Close value
 
         # --- 3) Z-score (per-column) ---
         if zscore_params is None:
